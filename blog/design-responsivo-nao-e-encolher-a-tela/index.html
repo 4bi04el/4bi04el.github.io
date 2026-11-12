@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design responsivo não é encolher a tela · Gabriel Barbosa</title><meta name="description" content="Por que layout, conteúdo e interação precisam se adaptar ao espaço disponível — com exemplos de CSS, testes e erros comuns.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><script src="/js/theme-init.js"></script><link rel="stylesheet" href="/css/main.bundle.css"><link rel="stylesheet" href="/css/portfolio.css"><link rel="stylesheet" href="/css/article.css"></head><body>
+<header class="site-header"><nav class="site-nav" aria-label="Navegação do artigo">
+      <a class="site-mark" href="/" aria-label="GB — portfólio">GB<span aria-hidden="true">.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="article-navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg><span>Menu</span></button>
+      <div class="nav-links" id="article-navigation"><a href="/#projetos">Projetos</a><a href="/#blog">Blog</a><a href="/#contato">Contato</a></div>
+      <div class="nav-actions"><a class="nav-icon" aria-label="GitHub" href="https://github.com/4bi04el" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.3-4.3-2.2-6-2.7M15 22v-3.4a3 3 0 0 0-.8-2.3c2.7-.3 5.6-1.3 5.6-6A4.7 4.7 0 0 0 18.5 7a4.4 4.4 0 0 0-.1-3.3s-1-.3-3.4 1.3a11.4 11.4 0 0 0-6 0C6.6 3.4 5.6 3.7 5.6 3.7A4.4 4.4 0 0 0 5.5 7a4.7 4.7 0 0 0-1.3 3.3c0 4.7 2.9 5.7 5.6 6A3 3 0 0 0 9 18.6V22" /></svg></a>
+      <button class="theme-toggle nav-icon" type="button" aria-label="Alternar tema" aria-pressed="false"><svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg><svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z" /></svg></button></div>
+    </nav></header><main class="article-page"><a class="article-back" href="/#blog">← Voltar ao Blog</a>
+<article><header class="article-header"><img class="article-cover" src="/img/Design%20responsivo%20n%C3%A3o%20%C3%A9%20encolher%20a%20tela.png" alt="Capa: Design responsivo não é encolher a tela" width="1080" height="1350" fetchpriority="high">
+<div class="article-meta"><span>design-responsivo</span><time datetime="2026-11-11">11 de novembro de 2026</time><span>7 min de leitura</span></div>
+<h1>Design responsivo não é encolher a tela</h1><p class="article-description">Por que layout, conteúdo e interação precisam se adaptar ao espaço disponível — com exemplos de CSS, testes e erros comuns.</p><div class="tags article-tags"><span class="tag">design-responsivo</span> <span class="tag">css</span> <span class="tag">ux</span> <span class="tag">frontend</span> <span class="tag">acessibilidade</span></div></header>
+<div class="article-content"><h1>Design responsivo não é encolher a tela</h1>
+<p>Abrir um site de computador no celular e reduzir tudo até caber na largura da tela não é uma solução responsiva. O conteúdo pode até ficar visível, mas textos se tornam difíceis de ler, botões ficam próximos demais e a navegação exige zoom ou movimentos horizontais.</p>
+<p><strong>Design responsivo é adaptar a experiência ao espaço e ao modo de interação disponíveis.</strong> Isso inclui reorganizar blocos, ajustar tipografia, selecionar imagens adequadas, preservar a ordem lógica do conteúdo e verificar se as ações continuam utilizáveis.</p>
+<h2>Layout fluido é a base</h2>
+<p>Em vez de fixar cada elemento em uma largura rígida, um layout flexível cresce e encolhe dentro de limites planejados:</p>
+<pre><code class="language-css">.container {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+</code></pre>
+<p>O contêiner ocupa o espaço disponível, mantém respiro nas laterais e não ultrapassa uma largura confortável em telas grandes. Isso é diferente de definir <code>width: 1200px</code> para toda a página e tentar corrigir depois no celular.</p>
+<p>Layouts fluidos também funcionam quando a janela do desktop está reduzida, quando uma interface é exibida em tela dividida ou quando o usuário aumenta a escala da página.</p>
+<h2>Mobile first não significa ignorar o desktop</h2>
+<p>A estratégia <strong>mobile first</strong> começa pela experiência em uma área estreita e acrescenta complexidade conforme há espaço. Por exemplo, cards podem formar uma coluna no celular e múltiplas colunas em telas maiores:</p>
+<pre><code class="language-css">.cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 72rem) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+</code></pre>
+<p>Os valores são <strong>exemplos</strong>, não tamanhos oficiais de celulares, tablets ou computadores. Escolha pontos de quebra quando o conteúdo deixar de funcionar bem; não apenas porque um modelo específico de aparelho existe.</p>
+<p>Em muitos casos, um grid pode se adaptar com menos media queries:</p>
+<pre><code class="language-css">.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+}
+</code></pre>
+<p>Esse padrão distribui colunas conforme o espaço disponível. Vale testar a largura mínima para evitar cards estreitos demais.</p>
+<h2>Responsividade também muda a hierarquia</h2>
+<p>No desktop, um painel lateral com filtros, uma lista e detalhes do item podem coexistir. No celular, tentar mostrar os três simultaneamente provavelmente prejudica a leitura. Uma solução pode apresentar primeiro a lista, depois os detalhes, e disponibilizar filtros em um controle claramente identificado.</p>
+<p>O cuidado essencial é <strong>não esconder informação importante sem alternativa de acesso</strong>. Reorganizar elementos visualmente também não deve criar uma ordem de navegação por teclado incompatível com a ordem de leitura. CSS não substitui uma estrutura semântica coerente no HTML.</p>
+<p>Para páginas de serviço, isso pode significar mostrar primeiro a proposta principal e o botão de contato, depois os detalhes e as provas de credibilidade. Para uma aplicação de edição, significa manter as ferramentas essenciais acessíveis sem forçar gestos ou precisão incompatíveis com telas pequenas.</p>
+<h2>Tipografia precisa se adaptar, não desaparecer</h2>
+<p>Uma fonte excelente em um monitor grande pode ficar enorme em telas estreitas — ou pequena demais quando reduzida proporcionalmente. A função <code>clamp()</code> permite controlar mínimos, variação e máximos:</p>
+<pre><code class="language-css">h1 {
+  font-size: clamp(2rem, 4vw + 1rem, 4.5rem);
+  line-height: 1.1;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+</code></pre>
+<p>O objetivo é manter legibilidade, contraste e comprimento de linha confortáveis. Teste também <strong>zoom do navegador</strong>, tamanhos de fonte ampliados e textos mais longos. Uma interface não está pronta só porque a captura de tela ficou bonita no tamanho original.</p>
+<h2>Responsivo não é apenas largura de tela</h2>
+<p>A interface também pode depender de recursos e preferências do usuário:</p>
+<ul>
+<li><strong>Forma de entrada:</strong> mouse, teclado, toque e tecnologias assistivas exigem caminhos utilizáveis.</li>
+<li><strong>Preferência por movimento reduzido:</strong> animações não essenciais devem respeitar <code>prefers-reduced-motion</code>.</li>
+<li><strong>Espaço do componente:</strong> um card pode estar estreito mesmo em um monitor grande porque está dentro de uma barra lateral.</li>
+<li><strong>Orientação e zoom:</strong> paisagem, retrato e ampliação mudam o espaço útil.</li>
+</ul>
+<p>Quando um componente deve reagir ao seu próprio contêiner, <strong>container queries</strong> podem ser mais apropriadas que media queries da página inteira:</p>
+<pre><code class="language-css">.card-wrapper {
+  container-type: inline-size;
+}
+
+@container (min-width: 32rem) {
+  .card-content {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 1rem;
+  }
+}
+</code></pre>
+<p>Assim, o card muda quando o espaço que ele recebeu permite, independentemente do tamanho total da janela.</p>
+<h2>Um site que cabe pode continuar ruim</h2>
+<p>Há diferenças entre <strong>layout adaptado</strong> e <strong>experiência funcional</strong>. Considere os seguintes sintomas:</p>
+<table>
+<thead>
+<tr>
+<th>Sintoma</th>
+<th>Possível problema</th>
+<th>Caminho de correção</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Scroll horizontal inesperado</td>
+<td>Elemento com largura fixa ou conteúdo que não quebra</td>
+<td>Inspecionar overflow, grids e textos longos</td>
+</tr>
+<tr>
+<td>Botões difíceis de tocar</td>
+<td>Alvos pequenos ou muito próximos</td>
+<td>Aumentar área clicável e espaçamento</td>
+</tr>
+<tr>
+<td>Menu inacessível</td>
+<td>Navegação depende exclusivamente de hover</td>
+<td>Oferecer interação por toque, clique e teclado</td>
+</tr>
+<tr>
+<td>Formulário desconfortável</td>
+<td>Campos estreitos e rótulos pouco claros</td>
+<td>Ajustar largura, labels e mensagens de erro</td>
+</tr>
+<tr>
+<td>Texto ilegível</td>
+<td>Tamanho ou contraste insuficiente</td>
+<td>Rever escala, contraste e espaçamento</td>
+</tr>
+<tr>
+<td>Imagem cortada indevidamente</td>
+<td><code>object-fit: cover</code> sem avaliar conteúdo</td>
+<td>Ajustar enquadramento e variantes de imagem</td>
+</tr>
+</tbody></table>
+<p>Nem tudo exige um breakpoint novo. Muitas falhas são resolvidas com HTML semântico, propriedades flexíveis e regras de interação mais adequadas.</p>
+<h2>Como testar de verdade</h2>
+<ol>
+<li>Comece com uma tela estreita e aumente gradualmente a largura do navegador, observando onde o conteúdo quebra.</li>
+<li>Teste um celular real, se possível, além da emulação do DevTools.</li>
+<li>Amplie a página e verifique se textos e controles continuam acessíveis.</li>
+<li>Navegue usando apenas teclado e observe foco, ordem e possibilidade de fechar menus.</li>
+<li>Preencha formulários, abra menus, toque em links e percorra fluxos completos.</li>
+<li>Verifique imagens, tabelas, palavras longas, mensagens de erro e estados de carregamento.</li>
+<li>Meça desempenho e estabilidade, sobretudo em dispositivos menos potentes e conexões limitadas.</li>
+</ol>
+<p>A responsividade deve ser validada em <strong>tarefas completas</strong>, não apenas por screenshots em três tamanhos predefinidos.</p>
+<h2>Dúvidas comuns</h2>
+<h3>Preciso criar uma versão separada do site para celular?</h3>
+<p>Normalmente, não. Um mesmo documento HTML pode atender diferentes tamanhos com CSS flexível e comportamento apropriado. Há casos especiais para experiências distintas, mas duplicar o site não é requisito para responsividade.</p>
+<h3>Quantos breakpoints são necessários?</h3>
+<p>Não há número obrigatório. Comece sem breakpoints desnecessários e adicione-os onde o conteúdo demonstrar necessidade. A complexidade deve ser justificada pelo comportamento do layout.</p>
+<h3><code>width: 100%</code> torna tudo responsivo?</h3>
+<p>Não. Essa regra não organiza hierarquia, controla tipografia, corrige botões pequenos nem garante boa navegação. Ela resolve apenas parte do dimensionamento.</p>
+<h3>Posso esconder conteúdo no celular para simplificar?</h3>
+<p>Pode reduzir detalhes redundantes, mas cuidado com informações decisivas e funcionalidades sem alternativa. Antes de ocultar, considere resumir, recolher em seções acessíveis ou mudar a ordem de apresentação.</p>
+<h3>Responsividade melhora o SEO automaticamente?</h3>
+<p>Não existe garantia de ranking. Um site utilizável no celular atende melhor às necessidades de muitos visitantes e facilita oferecer uma experiência consistente. Porém, qualidade do conteúdo, indexação, desempenho e outros fatores continuam relevantes.</p>
+<h2>Conclusão</h2>
+<p>Responsividade não é uma miniatura do desktop. É um projeto de interface que preserva clareza, contexto e capacidade de ação, independentemente do espaço disponível. Quando conteúdo, layout e interação são pensados juntos, o resultado é um site que funciona — e não apenas um site que cabe.</p>
+<h2>Referências</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Core/CSS_layout/Responsive_Design" target="_blank" rel="noopener noreferrer">MDN — Design Responsivo</a></li>
+<li><a href="https://web.dev/learn/design" target="_blank" rel="noopener noreferrer">web.dev — Learn Responsive Design</a></li>
+<li><a href="https://web.dev/learn/design/responsive-images" target="_blank" rel="noopener noreferrer">web.dev — Responsive Images</a></li>
+<li><a href="https://web.dev/articles/vitals" target="_blank" rel="noopener noreferrer">web.dev — Core Web Vitals</a></li>
+</ul>
+</div></article>
+<footer class="article-footer"><a href="/#blog">← Voltar ao Blog</a><a href="/#projetos">Projetos</a><a href="/#contato">Contato</a></footer></main>
+<script src="/js/bundle.js"></script><script src="/js/portfolio.js"></script></body></html>
